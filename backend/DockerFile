@@ -1,0 +1,25 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# system deps
+RUN apt-get update && apt-get install -y --no-install-recommends gcc libpq-dev build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# copy requirements and install
+COPY docker_requirements.txt .
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install -r docker_requirements.txt
+
+# copy app
+COPY . /app
+
+# ensure entrypoint script is executable
+RUN chmod +x /app/docker-entrypoint.sh
+
+EXPOSE 8000
+
+ENTRYPOINT ["/app/docker-entrypoint.sh"]

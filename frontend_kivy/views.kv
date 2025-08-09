@@ -1,0 +1,11 @@
+#:kivy 2.1.0
+<LoginScreen>:
+    orientation:'vertical'; padding:12; spacing:8
+    Label: text:"ExpenseMaster"; font_size:24
+    TextInput: id:email; hint_text:"Email" ; size_hint_y: None; height:40
+    Button: text:"Send Magic Link"; size_hint_y: None; height:40; on_release: root.send_magic()
+
+<MainScreen>:
+    orientation:'vertical'; padding:10; spacing:8
+    Label: text:"Welcome to ExpenseMaster"
+    Button: text:"Open Dashboard (web)"; on_release: root.open_dashboard()

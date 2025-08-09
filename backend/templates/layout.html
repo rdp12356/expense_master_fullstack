@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ExpenseMaster - {% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="brand">ExpenseMaster</div>
+    <div class="nav-actions">
+      {% if session.user_id %}
+        <form id="logoutForm" action="/logout" method="post"><button type="submit">Logout</button></form>
+      {% endif %}
+    </div>
+  </nav>
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-exchange}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-exchange_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-exchange_db}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    command: ["redis-server","--save","900","1"]
+    volumes:
+      - redisdata:/data
+    networks:
+      - backend
+
+  web:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8000:8000"    # gunicorn bound port
+    volumes:
+      - ./backend:/app
+    networks:
+      - backend
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: ["./docker-entrypoint.sh", "worker"]
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./backend:/app
+    networks:
+      - backend
+
+  beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: ["./docker-entrypoint.sh", "beat"]
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./backend:/app
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
+    networks:
+      - backend
+
+volumes:
+  pgdata:
+  redisdata:
+
+networks:
+  backend:

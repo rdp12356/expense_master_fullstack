@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+  <h2>Sign in or Sign up</h2>
+  <div id="msg"></div>
+  <form id="magicForm">
+    <label>Email</label>
+    <input type="email" id="email" required />
+    <label>Name (optional)</label>
+    <input type="text" id="name" />
+    <button type="submit">Send Magic Link</button>
+  </form>
+  <script>
+    document.getElementById('magicForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const name = document.getElementById('name').value;
+      const res = await fetch('/request-magic-link', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email,name})
+      });
+      const j = await res.json();
+      document.getElementById('msg').innerText = j.message || (j.magic_link ? 'Dev link returned. Check console.' : JSON.stringify(j));
+      if (j.magic_link) console.log("Dev magic link:", j.magic_link);
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,8 @@
+Flask>=2.2
+Flask-SQLAlchemy>=3.0
+python-dotenv>=1.0
+requests>=2.28
+itsdangerous>=2.1
+apscheduler>=3.9
+bcrypt>=4.0
+pycountry>=22.3.5

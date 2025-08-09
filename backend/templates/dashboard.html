@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+  <h2>Welcome, {{ user.email }}</h2>
+
+  <section id="apikeys">
+    <h3>API Keys</h3>
+    <div id="keyList"></div>
+    <input id="newKeyName" placeholder="Key name" />
+    <button onclick="createKey()">Create key</button>
+  </section>
+
+  <section id="usage">
+    <h3>Usage (last 24h)</h3>
+    <div id="usageCount"></div>
+    <canvas id="usageChart" width="400" height="150"></canvas>
+  </section>
+
+  <section id="convert">
+    <h3>Convert</h3>
+    <input id="cbase" placeholder="Base (USD)" value="USD" />
+    <input id="ctarget" placeholder="Target (EUR)" value="EUR" />
+    <input id="camount" placeholder="Amount" value="1" />
+    <button onclick="convert()">Convert</button>
+    <div id="convertResult"></div>
+  </section>
+{% endblock %}
