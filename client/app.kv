@@ -7,90 +7,86 @@
 #:import dp kivy.metrics.dp
 
 MDNavigationLayout:
-    MDScreen:
+    MDScreenManager:
+        id: screen_manager
+        MDScreen:
+            name: "dashboard"
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: "12dp"
+                padding: "12dp"
+                MDTopAppBar:
+                    id: top_bar
+                    title: "SuperApp"
+                    elevation: 2
+                    left_action_items: [["menu", lambda x: app.open_nav()]]
+                    right_action_items: [["theme-light-dark", lambda x: app.toggle_theme()]]
+                MDLabel:
+                    text: "Dashboard"
+                    halign: "left"
+                    font_style: "H5"
+                    size_hint_y: None
+                    height: self.texture_size[1] + dp(8)
+                Graph:
+                    id: chart
+                    xlabel: "Tasks"
+                    ylabel: "Completed"
+                    x_ticks_minor: 1
+                    x_ticks_major: 1
+                    y_ticks_major: 1
+                    y_grid_label: True
+                    x_grid_label: True
+                    padding: 5
+                    xmin: 0
+                    xmax: 10
+                    ymin: 0
+                    ymax: 10
+                Widget:
+                    size_hint_y: 0.1
 
-        MDTopAppBar:
-            id: top_bar
-            title: "SuperApp"
-            elevation: 2
-            left_action_items: [["menu", lambda x: app.open_nav()]]
-            right_action_items: [["theme-light-dark", lambda x: app.toggle_theme()]]
-            pos_hint: {"top": 1}
+        MDScreen:
+            name: "tasks"
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: "0dp"
+                MDTopAppBar:
+                    title: "Tasks"
+                    elevation: 1
+                MDScrollView:
+                    MDList:
+                        id: tasks_list
+            MDFloatingActionButton:
+                icon: "plus"
+                md_bg_color: app.theme_cls.primary_color
+                pos: self.parent.width - self.width - dp(24), dp(24)
+                on_release: app.show_add_task_dialog()
 
-        MDScreenManager:
-            id: screen_manager
-            MDScreen:
-                name: "dashboard"
-                MDBoxLayout:
-                    orientation: "vertical"
-                    spacing: "12dp"
-                    padding: "12dp"
-                    MDLabel:
-                        text: "Dashboard"
-                        halign: "left"
-                        font_style: "H5"
-                        size_hint_y: None
-                        height: self.texture_size[1] + dp(8)
-                    Graph:
-                        id: chart
-                        xlabel: "Tasks"
-                        ylabel: "Completed"
-                        x_ticks_minor: 1
-                        x_ticks_major: 1
-                        y_ticks_major: 1
-                        y_grid_label: True
-                        x_grid_label: True
-                        padding: 5
-                        xmin: 0
-                        xmax: 10
-                        ymin: 0
-                        ymax: 10
-                    Widget:
-                        size_hint_y: 0.1
+        MDScreen:
+            name: "settings"
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: "16dp"
+                spacing: "16dp"
+                MDTopAppBar:
+                    title: "Settings"
+                    elevation: 1
+                MDLabel:
+                    text: "API Base URL"
+                    halign: "left"
+                    size_hint_y: None
+                    height: self.texture_size[1] + dp(8)
+                MDTextField:
+                    id: api_base
+                    hint_text: "http://127.0.0.1:8000"
+                    on_text_validate: app.save_api_base_url(self.text)
+                MDRaisedButton:
+                    text: "Save"
+                    on_release: app.save_api_base_url(api_base.text)
 
-            MDScreen:
-                name: "tasks"
-                MDBoxLayout:
-                    orientation: "vertical"
-                    padding: "0dp"
-                    MDTopAppBar:
-                        title: "Tasks"
-                        elevation: 1
-                    MDScrollView:
-                        MDList:
-                            id: tasks_list
-                MDFloatingActionButton:
-                    icon: "plus"
-                    md_bg_color: app.theme_cls.primary_color
-                    pos: self.parent.width - self.width - dp(24), dp(24)
-                    on_release: app.show_add_task_dialog()
-
-            MDScreen:
-                name: "settings"
-                MDBoxLayout:
-                    orientation: "vertical"
-                    padding: "16dp"
-                    spacing: "16dp"
-                    MDToolbar:
-                        title: "Settings"
-                        elevation: 1
-                    MDLabel:
-                        text: "API Base URL"
-                        halign: "left"
-                        size_hint_y: None
-                        height: self.texture_size[1] + dp(8)
-                    MDTextField:
-                        id: api_base
-                        hint_text: "http://127.0.0.1:8000"
-                        on_text_validate: app.save_api_base_url(self.text)
-                    MDRaisedButton:
-                        text: "Save"
-                        on_release: app.save_api_base_url(api_base.text)
-
-        MDNavigationDrawer:
-            id: nav_drawer
-            radius: (0, 16, 16, 0)
-            ContentNavigationDrawer:
+    MDNavigationDrawer:
+        id: nav_drawer
+        radius: (0, 16, 16, 0)
+        ContentNavigationDrawer:
 
 
 <ContentNavigationDrawer@MDBoxLayout>:
