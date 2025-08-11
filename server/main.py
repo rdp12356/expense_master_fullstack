@@ -36,6 +36,12 @@ class TaskIn(BaseModel):
     completed: Optional[bool] = None
 
 
+class TaskUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    completed: Optional[bool] = None
+
+
 class TaskOut(BaseModel):
     id: int
     title: str
@@ -87,7 +93,7 @@ async def create_task(task: TaskIn):
 
 
 @app.patch("/tasks/{task_id}", response_model=TaskOut)
-async def update_task(task_id: int, task: TaskIn):
+async def update_task(task_id: int, task: TaskUpdate):
     fields: Dict[str, Any] = {}
     if task.title is not None and task.title != "":
         fields["title"] = task.title
