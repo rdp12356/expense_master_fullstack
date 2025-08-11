@@ -112,3 +112,4 @@ If icons or additional assets are added, include them via `--add-data`.
 - For charts, the app uses `kivy_garden.graph` (lightweight and Android-friendly).
 - For Android, ensure Java 17 and sufficient disk space. If build fails due to recipes, try cleaning: `buildozer android clean`.
 - For troubleshooting packaging, consult Kivy docs: `https://kivy.org/doc/stable/` and Buildozer docs: `https://buildozer.readthedocs.io/en/latest/`.
+- If you see `MDNavigationLayout must contain only ScreenManager and MDNavigationDrawer`, ensure the root of `app.kv` is `MDNavigationLayout` with only those two direct children. Top bars should be inside each screen.
