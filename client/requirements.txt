@@ -1,0 +1,5 @@
+kivy==2.3.0
+kivymd==1.1.1
+kivy-garden
+kivy-garden.graph
+requests>=2.31.0
